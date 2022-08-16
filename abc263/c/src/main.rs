@@ -3,33 +3,38 @@ use proconio::input;
 fn main() {
     input!(n: usize, m: usize);
 
-    let mut num_vec: Vec<bool> = Vec::new();
+    let ans: Vec<usize> = vec![1];
 
-    for _ in 1..=n {
-        num_vec.push(false);
-    }
+    let mut memo: Vec<bool> = initialize_memo(n);
+    std::mem::replace(&mut memo[0], true);
 
-    dfn(1, Vec::new(), initialize_memo(n), n);
+    dfn(ans, memo, n, m);
 }
 
-pub fn dfn(first: usize, mut ans: Vec<usize>, mut memo: Vec<bool>, max_len: usize) {
-    if ans.len() == max_len {
+pub fn dfn(ans: Vec<usize>, memo: Vec<bool>, n: usize, m: usize) {
+    if ans.len() == n {
         let ans_str_vec: Vec<String> = ans.iter().map(|x| x.to_string()).collect();
         let ans_str: String = ans_str_vec.join(" ");
         println!("{}", ans_str);
-        ans = Vec::new();
-        memo[first] = true;
-        dfn(first + 1, ans, memo, max_len);
     }
 
-    ans.push(first);
+    let ans_top = ans.get(ans.len() - 1).unwrap();
+    if *ans_top + 1 > m {
+        return
+    }
+    if memo[*ans_top] == false {
+        let mut ans_1 = ans.clone();
+        ans_1.push(*ans_top + 1);
+        let mut memo_clone_1 = memo.clone();
+        std::mem::replace(&mut memo_clone_1[*ans_top], true);
+        dfn(ans_1, memo_clone_1, n, m);
 
-    let mut ans: Vec<usize> = Vec::new();
-    ans.push(first);
-
-    // while
+        let mut ans_2 = ans.clone();
+        let mut memo_clone_2 = memo.clone();
+        std::mem::replace(&mut memo_clone_2[*ans_top], true);
+        dfn(ans_2, memo_clone_2, n, m);
+    }
 }
-
 
 pub fn initialize_memo(max_len: usize) -> Vec<bool> {
     let mut memo: Vec<bool> = Vec::new();
