@@ -5,7 +5,7 @@ fn main() {
 
     let ans: Vec<usize> = vec![1];
 
-    let mut memo: Vec<bool> = initialize_memo(n);
+    let mut memo: Vec<bool> = initialize_memo(m);
     std::mem::replace(&mut memo[0], true);
 
     dfn(ans, memo, n, m);
@@ -33,6 +33,14 @@ pub fn dfn(ans: Vec<usize>, memo: Vec<bool>, n: usize, m: usize) {
         let mut memo_clone_2 = memo.clone();
         std::mem::replace(&mut memo_clone_2[*ans_top], true);
         dfn(ans_2, memo_clone_2, n, m);
+    } else {
+        let unreached_number: usize = memo.into_iter().position(|x| x).unwrap();
+
+        let mut ans_3 = ans.clone();
+        ans_3.push(unreached_number);
+
+        let mut memo_clone_3 = memo.clone();
+        dfn(ans, memo_clone_3, n, m);
     }
 }
 
