@@ -34,13 +34,18 @@ pub fn dfn(ans: Vec<usize>, memo: Vec<bool>, n: usize, m: usize) {
         std::mem::replace(&mut memo_clone_2[*ans_top], true);
         dfn(ans_2, memo_clone_2, n, m);
     } else {
-        let unreached_number: usize = memo.into_iter().position(|x| x).unwrap();
+        let mut memo_clone_3 = memo.clone();
+        let unreached_number_option: Option<usize> = memo_clone_3.iter().position(|x| *x != true);
+        let unreached_number: usize = match unreached_number_option {
+            Some(number) => number,
+            _ => return
+        };
+        std::mem::replace(&mut memo_clone_3[unreached_number], true);
 
         let mut ans_3 = ans.clone();
-        ans_3.push(unreached_number);
+        ans_3.push(unreached_number + 1);
 
-        let mut memo_clone_3 = memo.clone();
-        dfn(ans, memo_clone_3, n, m);
+        dfn(ans_3, memo_clone_3, n, m);
     }
 }
 
