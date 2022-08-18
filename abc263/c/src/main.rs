@@ -1,5 +1,6 @@
 use proconio::input;
 
+// 正解！
 fn main() {
     input!(n: usize, m: usize);
 
