@@ -27,16 +27,25 @@ pub fn dfn(ans: Vec<usize>, memo: Vec<bool>, n: usize, m: usize) {
         return
     }
     if memo[ans_top] == false {
-        let mut ans_1 = ans.to_vec();
-        ans_1.push(ans_top + 1);
-        let mut memo_clone_1 = memo.to_vec();
-        std::mem::replace(&mut memo_clone_1[ans_top], true);
-        dfn(ans_1, memo_clone_1, n, m);
 
-        let mut ans_2 = ans.to_vec();
-        let mut memo_clone_2 = memo.to_vec();
-        std::mem::replace(&mut memo_clone_2[ans_top], true);
-        dfn(ans_2, memo_clone_2, n, m);
+        for i in ans_top..m {
+            let mut ans_tmp = ans.to_vec();
+            let mut memo_tmp = memo.to_vec();
+            ans_tmp.push(i + 1);
+            for j in 0..=i {
+                std::mem::replace(&mut memo_tmp[j], true);
+            }
+            dfn(ans_tmp, memo_tmp, n, m);
+        }
+
+        for k in ans_top..m {
+            let mut ans_tmp = ans.to_vec();
+            let mut memo_tmp = memo.to_vec();
+            for l in 0..=k {
+                std::mem::replace(&mut memo_tmp[k], true);
+            }
+            dfn(ans_tmp, memo_tmp, n, m);
+        }
     } else {
         let mut memo_clone_3 = memo.to_vec();
         let unreached_number_option: Option<usize> = memo_clone_3.iter().position(|x| *x != true);
