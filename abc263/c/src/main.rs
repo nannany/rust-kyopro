@@ -8,10 +8,10 @@ fn main() {
 
     let mut memo: Vec<bool> = initialize_memo(m);
 
-    dfn(ans, memo, n, m);
+    dfs(ans, memo, n, m);
 }
 
-pub fn dfn(ans: Vec<usize>, memo: Vec<bool>, n: usize, m: usize) {
+pub fn dfs(ans: Vec<usize>, memo: Vec<bool>, n: usize, m: usize) {
     if ans.len() == n {
         let ans_str_vec: Vec<String> = ans.iter().map(|x| x.to_string()).collect();
         let ans_str: String = ans_str_vec.join(" ");
@@ -31,7 +31,7 @@ pub fn dfn(ans: Vec<usize>, memo: Vec<bool>, n: usize, m: usize) {
         for j in 0..=i {
             std::mem::replace(&mut memo_tmp[j], true);
         }
-        dfn(ans_tmp, memo_tmp, n, m);
+        dfs(ans_tmp, memo_tmp, n, m);
     }
 }
 
