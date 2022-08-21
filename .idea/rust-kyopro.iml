@@ -8,11 +8,13 @@
       <sourceFolder url="file://$MODULE_DIR$/abc263/c/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/abc263/c_second/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/abc263/d/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/abc263/d_second/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/abc263/abc263/target" />
       <excludeFolder url="file://$MODULE_DIR$/abc263/b/target" />
       <excludeFolder url="file://$MODULE_DIR$/abc263/c/target" />
       <excludeFolder url="file://$MODULE_DIR$/abc263/d/target" />
       <excludeFolder url="file://$MODULE_DIR$/abc263/c_second/target" />
+      <excludeFolder url="file://$MODULE_DIR$/abc263/d_second/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
