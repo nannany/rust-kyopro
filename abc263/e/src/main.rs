@@ -11,12 +11,14 @@ fn main() {
 
         let mut numerator: i64 = 0;
         for j in 1..=ai {
-            numerator += dp[i + j as usize]
+            numerator += dp[i + j as usize];
+            numerator %= 998244353;
         }
         numerator += ai + 1;
-        dp[i] = numerator / ai;
+        numerator %= 998244353;
+        dp[i] = numerator * (ai.pow(998244351)) % 998244353;
     }
 
-    println!("{}", dp[0]);
+    println!("{}", dp[0] % 998244353);
 }
 
