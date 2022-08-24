@@ -12,13 +12,23 @@ fn main() {
         let mut numerator: i64 = 0;
         for j in 1..=ai {
             numerator += dp[i + j as usize];
-            numerator %= 998244353;
         }
         numerator += ai + 1;
-        numerator %= 998244353;
-        dp[i] = numerator * (ai.pow(998244351)) % 998244353;
+        dp[i] = numerator * (pow(ai, 998244351)) % 998244353;
     }
 
     println!("{}", dp[0] % 998244353);
+}
+
+pub fn pow(mut x: i64, mut n: i64) -> i64 {
+    let mut t: i64 = 1;
+    while n > 0 {
+        if n & 1 == 1 {
+            t = t * x % 998244353;
+        }
+        x = x * x % 998244353;
+        n >>= 1;
+    }
+    t
 }
 
