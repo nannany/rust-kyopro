@@ -5,6 +5,7 @@ fn main() {
     }
 
     let mut dp: Vec<i64> = vec![0; n];
+    let mut sum: Vec<i64> = vec![0; n];
 
     for i in (0..n - 1).rev() {
         let ai = a[i];
