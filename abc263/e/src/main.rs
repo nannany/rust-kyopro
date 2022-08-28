@@ -15,7 +15,7 @@ fn main() {
 
         numerator += ai + 1;
         dp[i] = numerator * (pow(ai, 998244351)) % 998244353;
-        sum[i] = sum[i + 1] + dp[i];
+        sum[i] = sum[i + 1] + dp[i] % 998244351;
     }
 
     println!("{}", dp[0]);
