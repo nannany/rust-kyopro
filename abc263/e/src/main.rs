@@ -13,7 +13,8 @@ fn main() {
         let mut numerator: i64;
         numerator = sum[i + 1] - sum[i + ai as usize + 1];
 
-        numerator += ai + 1;
+        numerator += ai + 1 ;
+        numerator %= 998244353;
         dp[i] = numerator * (pow(ai, 998244351)) % 998244353;
         sum[i] = sum[i + 1] + dp[i] % 998244351;
     }
