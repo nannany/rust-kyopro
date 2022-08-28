@@ -5,20 +5,20 @@ fn main() {
     }
 
     let mut dp: Vec<i64> = vec![0; n];
-    let mut sum: Vec<i64> = vec![0; n];
+    let mut sum: Vec<i64> = vec![0; n + 1];
 
     for i in (0..n - 1).rev() {
         let ai = a[i];
 
-        let mut numerator: i64 = 0;
-        for j in 1..=ai {
-            numerator += dp[i + j as usize];
-        }
+        let mut numerator: i64;
+        numerator = sum[i + 1] - sum[i + ai as usize + 1];
+
         numerator += ai + 1;
         dp[i] = numerator * (pow(ai, 998244351)) % 998244353;
+        sum[i] = sum[i + 1] + dp[i];
     }
 
-    println!("{}", dp[0] % 998244353);
+    println!("{}", dp[0]);
 }
 
 pub fn pow(mut x: i64, mut n: i64) -> i64 {
