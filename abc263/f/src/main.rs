@@ -13,10 +13,10 @@ fn main() {
         for j in 0..1 << n {
             if (j / (1 << i - 1)) % 2 == 0 {
                 // 右側と対戦
-                dp[i][j] = max[i][j] + c[j][i - 1]; //todo
+                dp[i][j] = max[i - 1][j] + c[j][i - 1]; //todo
             } else {
                 // 左側と対戦
-                dp[i][j] = max[i][j] + c[j][i - 1]; //todo
+                dp[i][j] = max[i - 1][j] + c[j][i - 1]; //todo
             }
 
             // maxの更新
