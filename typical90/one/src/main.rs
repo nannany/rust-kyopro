@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 // https://atcoder.jp/contests/typical90/tasks/typical90_a
 fn main() {
     proconio::input! {
@@ -14,6 +16,7 @@ fn main() {
 
     let mut range = l / 2;
     let mut target = range;
+    let mut target_set :HashSet<u32>= HashSet::new();
 
     let mut max = *elements.iter().min().unwrap() as u32;
     while range >= 1 {
@@ -33,15 +36,11 @@ fn main() {
             }
         }
 
-
-        if range == 1 {
-            break;
-        } else if range == 2 {
+        if range == 2 {
             range /= 2
         } else {
             range = range / 2 + 1;
         }
-
 
         if count == k + 1 {
             max = target;
@@ -49,6 +48,11 @@ fn main() {
         } else {
             target -= range;
         }
+        if target_set.contains(&target) {
+            break;
+        }
+        target_set.insert(target);
+
     }
 
     println!("max: {:?}", max);
