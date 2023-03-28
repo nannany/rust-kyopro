@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::cmp::{min, max};
 
 // https://atcoder.jp/contests/typical90/tasks/typical90_a
 fn main() {
@@ -18,7 +19,7 @@ fn main() {
     let mut target = range;
     let mut target_set: HashSet<u32> = HashSet::new();
 
-    let mut max = *elements.iter().min().unwrap() as u32;
+    let mut answer = *elements.iter().min().unwrap() as u32;
     loop {
         let mut count = 0;
         let mut bucket = 0;
@@ -35,13 +36,13 @@ fn main() {
             }
         }
 
-        range = before_target.abs_diff(target) / 2;
+        range = (max(before_target, target) - min(before_target, target)) / 2;
         if range == 0 {
             range += 1;
         }
 
         if count == k + 1 {
-            max = target;
+            answer = target;
             before_target = target;
             target += range;
         } else {
@@ -54,5 +55,5 @@ fn main() {
         target_set.insert(target);
     }
 
-    println!("{:?}", max);
+    println!("{:?}", answer);
 }
