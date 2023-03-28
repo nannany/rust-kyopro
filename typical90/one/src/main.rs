@@ -13,14 +13,13 @@ fn main() {
     elements.push(l - a[n - 1]);
     elements.insert(0, a[0]);
 
-
     let mut range = l / 2;
+    let mut before_target = l;
     let mut target = range;
-    let mut target_set :HashSet<u32>= HashSet::new();
+    let mut target_set: HashSet<u32> = HashSet::new();
 
     let mut max = *elements.iter().min().unwrap() as u32;
-    while range >= 1 {
-        println!("target: {:?}", target);
+    loop {
         let mut count = 0;
         let mut bucket = 0;
         for ele in &elements {
@@ -36,24 +35,24 @@ fn main() {
             }
         }
 
-        if range == 2 {
-            range /= 2
-        } else {
-            range = range / 2 + 1;
+        range = before_target.abs_diff(target) / 2;
+        if range == 0 {
+            range += 1;
         }
 
         if count == k + 1 {
             max = target;
+            before_target = target;
             target += range;
         } else {
+            before_target = target;
             target -= range;
         }
         if target_set.contains(&target) {
             break;
         }
         target_set.insert(target);
-
     }
 
-    println!("max: {:?}", max);
+    println!("{:?}", max);
 }
