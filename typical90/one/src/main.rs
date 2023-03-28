@@ -22,7 +22,6 @@ fn main() {
         let mut bucket = 0;
         for ele in &elements {
             bucket += ele;
-            println!("bucket: {:?}", bucket);
 
             if bucket >= target as u32 {
                 bucket = 0;
@@ -34,7 +33,15 @@ fn main() {
             }
         }
 
-        range /= 2;
+
+        if range == 1 {
+            break;
+        } else if range == 2 {
+            range /= 2
+        } else {
+            range = range / 2 + 1;
+        }
+
 
         if count == k + 1 {
             max = target;
