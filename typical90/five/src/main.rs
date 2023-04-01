@@ -9,22 +9,24 @@ fn main() {
         c: [usize; k]
     }
 
-    let mut answer = 0;
+    // dp := dp[i][j] := 上i桁目まで見たときに、bで割った余りがjになるような数の個数
+    let mut dp = vec![vec![0; b]; n + 1];
 
-    // cの重複配列を取得
-    let repeated_permutations = repeat(c.clone()).take(n).multi_cartesian_product();
+    for i in 0..n {
+        for j in 0..b {
+            for &c in &c {
+                if i == 0 && j == 0 {
+                    dp[i + 1][c % b] += 1;
+                    continue;
+                }
 
-    for combination in repeated_permutations {
-        let mut sum = 0;
-        for i in 0..n {
-            sum += combination[i] * exponentiation_by_squaring_with_modulo(10, n - i - 1, 1000000007);
-        }
-        if sum % b == 0 {
-            answer += 1;
+                let next = (j * 10 + c) % b;
+                dp[i + 1][next] += dp[i][j] % 1000000007;
+            }
         }
     }
 
-    println!("{}", answer);
+    println!("{}", dp[n][0]);
 }
 
 /// Returns the value of x^n mod m.
