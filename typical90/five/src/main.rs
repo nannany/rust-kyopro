@@ -10,7 +10,7 @@ fn main() {
     }
 
     // dp := dp[i][j] := 上i桁目まで見たときに、bで割った余りがjになるような数の個数
-    let mut dp = vec![vec![0; b]; n + 1];
+    let mut dp: Vec<Vec<usize>> = vec![vec![0; b]; n + 1];
 
     for i in 0..n {
         for j in 0..b {
@@ -26,7 +26,7 @@ fn main() {
         }
     }
 
-    println!("{}", dp[n][0]);
+    println!("{}", dp[n][0] % 1000000007);
 }
 
 /// Returns the value of x^n mod m.
