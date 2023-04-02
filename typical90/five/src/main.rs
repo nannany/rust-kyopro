@@ -17,7 +17,7 @@ fn main() {
         }
     }
 
-    // matrix を n
+    // matrix を n回かけたものを計算
     let n_matrix = matrix_pow(matrix, n);
 
     println!("{}", n_matrix.data[0][0] % 1000000007);
