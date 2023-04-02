@@ -9,39 +9,73 @@ fn main() {
         c: [usize; k]
     }
 
-    // dp := dp[i][j] := 上i桁目まで見たときに、bで割った余りがjになるような数の個数
-    let mut dp: Vec<Vec<usize>> = vec![vec![0; b]; n + 1];
+    // matrix を0で初期化
+    let mut matrix: SquareMatrix = SquareMatrix::new(b, vec![vec![0; b]; b]);
+    // matrix を計算する
+    for i in 0..b {
+        for &c in &c {
+            matrix.data[i][(i * 10 + c) % b] += 1;
+        }
+    }
 
-    for i in 0..n {
-        for j in 0..b {
-            for &c in &c {
-                if i == 0 && j == 0 {
-                    dp[i + 1][c % b] += 1;
-                    continue;
+    // matrix を n
+    let n_matrix = matrix_pow(matrix, n);
+
+    println!("{}", n_matrix.data[0][0] % 1000000007);
+}
+
+/// 引数に受け取ったmatrix を n 乗したものを返す
+fn matrix_pow(matrix: SquareMatrix, n: usize) -> SquareMatrix {
+    let mut ans: SquareMatrix = SquareMatrix::new(matrix.sx, vec![vec![0; matrix.sx]; matrix.sx]);
+
+    // 単位行列として初期化
+    for i in 0..matrix.sx {
+        ans.data[i][i] = 1;
+    }
+
+    let mut tmp = matrix;
+    let mut n = n;
+    while n > 0 {
+        if n & 1 == 1 {
+            ans = ans.matrix_mul_from_right(&tmp.clone());
+        }
+        tmp = tmp.clone().matrix_mul_from_right(&tmp.clone());
+        n >>= 1;
+    }
+    ans
+}
+
+/// 1辺のながさがsxの正方行列
+struct SquareMatrix {
+    sx: usize,
+    data: Vec<Vec<usize>>,
+}
+
+impl SquareMatrix {
+    fn new(sx: usize, data: Vec<Vec<usize>>) -> Self {
+        Self { sx, data }
+    }
+
+    fn matrix_mul_from_right(&self, other: &SquareMatrix) -> SquareMatrix {
+        let mut ans: SquareMatrix = SquareMatrix::new(self.sx, vec![vec![0; self.sx]; self.sx]);
+        for i in 0..self.sx {
+            for j in 0..self.sx {
+                for k in 0..self.sx {
+                    ans.data[i][j] += (self.data[i][k] % 1000000007) * (other.data[k][j] % 1000000007) % 1000000007;
                 }
-
-                let next = (j * 10 + c) % b;
-                dp[i + 1][next] += dp[i][j] % 1000000007;
             }
         }
+        ans
     }
 
-    println!("{}", dp[n][0] % 1000000007);
-}
-
-/// Returns the value of x^n mod m.
-fn exponentiation_by_squaring_with_modulo(x: usize, n: usize, m: usize) -> usize {
-    let mut x = x;
-    let mut n = n;
-    let mut result = 1;
-
-    while n > 0 {
-        if n % 2 == 1 {
-            result = result * x % m;
+    fn clone(&self) -> Self {
+        let mut data: Vec<Vec<usize>> = vec![vec![0; self.sx]; self.sx];
+        for i in 0..self.sx {
+            for j in 0..self.sx {
+                data[i][j] = self.data[i][j];
+            }
         }
-        x = x * x % m;
-        n /= 2;
+        Self::new(self.sx, data)
     }
-
-    result
 }
+
