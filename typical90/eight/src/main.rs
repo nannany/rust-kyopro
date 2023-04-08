@@ -1,29 +1,20 @@
 fn main() {
     proconio::input! {
-        n: usize,
+        _n: usize,
         s: String,
     }
 
     // dp
-    let mut dp = vec![vec![0; n + 1]; 8];
+    let mut dp = vec![0; 8]; // dp[0]はダミーで、dp[1]がaまでの通り数、dp[2]がtまでのとおりすう
+    dp[0] = 1;
 
-    let atcoder: Vec<char> = "atcoder".chars().collect();
+    let atcoder = "atcoder";
 
-    for i in 1..n + 1 {
-        for j in 1..8 {
-            if s.chars().nth(i - 1).unwrap() == atcoder[j - 1] {
-                if j == 1 {
-                    dp[j][i] = dp[j][i - 1] + 1;
-                } else {
-                    dp[j][i] = dp[j - 1][i - 1] + dp[j][i - 1];
-                }
-            } else {
-                dp[j][i] = dp[j][i - 1];
-            }
-
-            dp[j][i] %= 1_000_000_007;
+    for c in s.chars() {
+        if let Some(x) = atcoder.find(c) { // xは位置
+            dp[x + 1] = (dp[x] + dp[x + 1]) % 1_000_000_007;
         }
     }
 
-    println!("{}", dp[7][n] % 1_000_000_007);
+    println!("{}", dp[7] % 1_000_000_007);
 }
