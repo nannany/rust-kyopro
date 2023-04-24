@@ -19,15 +19,25 @@ fn main() {
             angles.push(angle);
         }
 
-        angles.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        let mut canonical_angles: Vec<f64> = angles.iter().map(|&angle| {
+            angle % 360.0
+        }).collect();
 
-        for angle in &angles {
+        canonical_angles.sort_by(|a, b| a.partial_cmp(b).unwrap());
+
+        for angle in &canonical_angles {
             // 該当のangleの理想の相手の角度を求める
+            let ideal_angle = (angle + 180.0) % 360.0;
 
+            let candidate = binary_search(&canonical_angles, ideal_angle);
 
-            binary_search()
+            println!("{}", candidate);
+
+            // if candidate is larger than answer, then update answer
+            answer = answer.max(candidate);
         }
     }
+    println!("{}", answer);
 }
 
 fn calculate_angle(x1: i64, y1: i64, x2: i64, y2: i64) -> f64 {
@@ -37,21 +47,24 @@ fn calculate_angle(x1: i64, y1: i64, x2: i64, y2: i64) -> f64 {
     rad * 180.0 / std::f64::consts::PI
 }
 
-// 二分探索
-fn binary_search(angles: Vec<f64>, org_angle: f64) -> f64 {
+// 二分探索。anglesのなかで、ideal_angleに最も近いものを探す
+fn binary_search(angles: &Vec<f64>, ideal_angle: f64) -> f64 {
     let mut left: usize = 0;
     let mut right: usize = angles.len() - 1;
-    let mut angle: f64 = 0.0;
 
-    while left <= right {
-        let mid: usize = (left + right) / 2;
-
-
-
+    while left < right {
+        let mid = (left + right) / 2;
+        if angles[mid] == ideal_angle {
+            return angles[mid];
+        } else if angles[mid] < ideal_angle {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
     }
 
-    0.9
+    // left == right
+    angles[left]
 }
 
-// calc angle
 
