@@ -31,10 +31,10 @@ fn main() {
 
             let candidate = binary_search(&canonical_angles, ideal_angle);
 
-            println!("{}", candidate);
+            let tmp = (angle - candidate).abs();
 
             // if candidate is larger than answer, then update answer
-            answer = answer.max(candidate);
+            answer = answer.max(tmp.min(360.0 - tmp));
         }
     }
     println!("{}", answer);
