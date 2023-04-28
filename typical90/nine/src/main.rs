@@ -1,3 +1,5 @@
+use std::f64::consts::PI;
+
 fn main() {
     proconio::input! {
         n: usize,
@@ -5,65 +7,53 @@ fn main() {
     }
 
     let mut answer: f64 = 0.0;
-
-    // xyをprintln
-    for &(x_origin, y_origin) in &xy {
+    for (ox, oy) in &xy {
         let mut angles: Vec<f64> = Vec::new();
 
-        for &(x, y) in &xy {
-            if (x == x_origin) && (y == y_origin) {
+        for (tx, ty) in &xy {
+            if ox == tx && oy == ty {
                 continue;
             }
-
-            let angle = calculate_angle(x_origin, y_origin, x, y);
-            angles.push(angle);
+            let dx = (tx - ox) as f64;
+            let dy = (ty - oy) as f64;
+            let angle = ((dy.atan2(dx) / PI) * 180.0);
+            if angle < 0.0 {
+                angles.push(angle + 360.0);
+            } else {
+                angles.push(angle);
+            }
         }
 
-        let mut canonical_angles: Vec<f64> = angles.iter().map(|&angle| {
-            angle % 360.0
-        }).collect();
+        angles.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
-        canonical_angles.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        for &angle in &angles {
+            let mut ideal = 0.0;
+            if angle < 180.0 {
+                ideal = angle + 180.0;
+            } else {
+                ideal = angle - 180.0;
+            }
 
-        for angle in &canonical_angles {
-            // 該当のangleの理想の相手の角度を求める
-            let ideal_angle = (angle + 180.0) % 360.0;
+            let candidate = bin_search(&angles, ideal);
 
-            let candidate = binary_search(&canonical_angles, ideal_angle);
-
-            let tmp = (angle - candidate).abs();
-
-            // if candidate is larger than answer, then update answer
-            answer = answer.max(tmp.min(360.0 - tmp));
+            answer = answer.max((candidate - angle).abs().);
         }
     }
+
     println!("{}", answer);
 }
 
-fn calculate_angle(x1: i64, y1: i64, x2: i64, y2: i64) -> f64 {
-    let x: f64 = (x2 - x1) as f64;
-    let y: f64 = (y2 - y1) as f64;
-    let rad = y.atan2(x);
-    rad * 180.0 / std::f64::consts::PI
-}
-
-// 二分探索。anglesのなかで、ideal_angleに最も近いものを探す
-fn binary_search(angles: &Vec<f64>, ideal_angle: f64) -> f64 {
-    let mut left: usize = 0;
-    let mut right: usize = angles.len() - 1;
-
+fn bin_search(angles: &Vec<f64>, ideal: f64) -> f64 {
+    let mut left = 0;
+    let mut right = angles.len() - 1;
     while left < right {
         let mid = (left + right) / 2;
-        if angles[mid] == ideal_angle {
-            return angles[mid];
-        } else if angles[mid] < ideal_angle {
+        if angles[mid] < ideal {
             left = mid + 1;
         } else {
             right = mid;
         }
     }
-
-    // left == right
     angles[left]
 }
 
