@@ -16,7 +16,7 @@ fn main() {
             }
             let dx = (tx - ox) as f64;
             let dy = (ty - oy) as f64;
-            let angle = ((dy.atan2(dx) / PI) * 180.0);
+            let angle = (dy.atan2(dx) / PI) * 180.0;
             if angle < 0.0 {
                 angles.push(angle + 360.0);
             } else {
@@ -34,16 +34,28 @@ fn main() {
                 ideal = angle - 180.0;
             }
 
-            let candidate = bin_search(&angles, ideal);
+            let candidate_idx = bin_search(&angles, ideal);
 
-            answer = answer.max((candidate - angle).abs().);
+            let candidate: f64 = if candidate_idx == 0 {
+                get_canonical_angle((angles[candidate_idx] - angle).abs())
+            } else {
+                get_canonical_angle((angles[candidate_idx - 1] - angle).abs()).max(
+                    get_canonical_angle((angles[candidate_idx] - angle).abs()))
+            };
+
+            answer = answer.max(candidate);
         }
     }
 
     println!("{}", answer);
 }
 
-fn bin_search(angles: &Vec<f64>, ideal: f64) -> f64 {
+fn get_canonical_angle(angle: f64) -> f64 {
+    angle.min(360.0 - angle)
+}
+
+
+fn bin_search(angles: &Vec<f64>, ideal: f64) -> usize {
     let mut left = 0;
     let mut right = angles.len() - 1;
     while left < right {
@@ -54,7 +66,7 @@ fn bin_search(angles: &Vec<f64>, ideal: f64) -> f64 {
             right = mid;
         }
     }
-    angles[left]
+    left
 }
 
 
