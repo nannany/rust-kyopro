@@ -12,10 +12,41 @@ fn main() {
     // dpでやる
     let mut dp = vec![[0; 5001]; n];
 
+    let d_max = dcs[n - 1].0;
+
     if dcs[0].0 >= dcs[0].1 {
         dp[0][dcs[0].1] = dcs[0].2;
     }
 
+    for i in 1..n {
+        let (d, c, s) = dcs[i];
+        for j in 0..=d_max {
+            if j == 0 {
+                if d >= c {
+                    dp[i][c] = s;
+                }
+            } else {
+                if dp[i - 1][j] == 0 {
+                    continue;
+                } else {
+                    if j + c > d {
+                        dp[i][j] = dp[i - 1][j];
+                    } else {
+                        dp[i][j + c] = dp[i - 1][j] + s;
+                    }
+                }
+            }
+        }
+    }
+
+
+    let answer = dp[n - 1].iter().max().unwrap();
+
+    // dpのn-1列めをprint
+    // println!("{:?}", dp[n - 2]);
+    // println!("{:?}", dp[n - 1]);
+
+    println!("{}", answer);
 }
 
 
