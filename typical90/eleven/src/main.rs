@@ -30,9 +30,10 @@ fn main() {
                     continue;
                 } else {
                     if j + c > d {
-                        dp[i][j] = dp[i - 1][j];
+                        dp[i][j] = dp[i - 1][j].max(dp[i][j]);
                     } else {
-                        dp[i][j + c] = dp[i - 1][j] + s;
+                        dp[i][j] = dp[i - 1][j].max(dp[i][j]);
+                        dp[i][j + c] = (dp[i - 1][j] + s).max(dp[i][j + c]);
                     }
                 }
             }
@@ -41,10 +42,6 @@ fn main() {
 
 
     let answer = dp[n - 1].iter().max().unwrap();
-
-    // dpのn-1列めをprint
-    // println!("{:?}", dp[n - 2]);
-    // println!("{:?}", dp[n - 1]);
 
     println!("{}", answer);
 }
